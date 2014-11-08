@@ -1,0 +1,149 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Part*
+Introduction
+\end_layout
+
+\begin_layout Standard
+Optimization has been the one of the main goals of computational since the
+ beginning of computing.
+ Designing something to perform optimally in all conditions is the end goal,
+ but for the most part we simply focus on local optimization for a single
+ application at a time.
+ Optimization takes time, however.
+ The optimization process can be a very long and arduous task of changing
+ the value of a single variable each time and running a new simulation to
+ determine what should be done with the new variable value.
+ This leads to many simulations for a small benefit.
+ This type of optimization tends to be so costly that it prohibits very
+ large scale optimizations simply because of run time.
+\end_layout
+
+\begin_layout Standard
+With this problem in mind, adjoint based optimization was implemented.
+ Adjoint based optimization allows for optimization of a multitude of control
+ variables in a single simulation.
+ The process simply runs the simulation forward to the end of the interaction
+ and then maps back the simulation values for each step with a reverse solver
+ to determine the direction and magnitude that the control variables should
+ be moved.
+ Adjoint based optimization is not without flaws itself.
+ To run an iteration of adjoint based optimization, the code must run the
+ entire forward simulation, while storing every step for use in the reverse
+ solver.
+ This proves to be very costly for simulations of large size in either the
+ time or space components.
+ For real world problems, we often need at least one of those components
+ to be very large, usually both.
+ To get valid results for use with actual problems, we need high fidelity
+ in the results, which means we need at least fairly fine meshes in the
+ simulation region leading to even larger amounts of data to be stored for
+ the reverse solver.
+ 
+\end_layout
+
+\begin_layout Standard
+The adjoint problem becomes intractible for the naive approach of just simply
+ writing out every step and then reading it back in when necessary.
+ For this reason, the concept of checkpointing was originally applied.
+ Checkpointing allows for the execution of adjoint-based optimization with
+ a greatly reduced need for storage space.
+ With checkpoionting, one runs a forward simulation and instead of storing
+ every step, only stores a few checkpoints from which to restart the forward
+ solver when the reverse solver gets to the point where it needs the steps
+ between them.
+ This greatly reduces the need for storage space to run a simulation.
+ With improvements in how the checkpointing is done, the possible simulations
+ are becoming larger and longer.
+ Thanks to these advances, adjont based optimization has now become applicable
+ to very large problems.
+ We introduce a new implementation of checkpointing that allows for adjoint-base
+d optiomization of fully 3D jet flows and noise caused by them.
+\end_layout
+
+\begin_layout Standard
+Jet engine noise is a problem as old as jet fighters themselves.
+ As the engines got and continue to get more powerful, the problem of engine
+ noise gets continually worse.
+ When looking at aircraft carriers, the problem is even larger.
+ Not only are there many jets on the carrier and taking off nearly constantly,
+ but the workers on the deck of the carrier are exposed to the jet noise
+ from a distance much less than anywhere else.
+ This creates a situation that can be extremely dangerous for the hearing
+ of the aircraft carrier deck workers.
+ Under OSHA regulations, a person working on the deck of a modern aircraft
+ carrier could work less than eight minutes before needing to take a full
+ day off.
+ The noise is even more pervasive, given that when the workers retire from
+ the deck for the day, they sleep only a few floors below the source of
+ the noise, thus getting exposed to a portion of the noise even in down
+ time.
+\end_layout
+
+\begin_layout Standard
+In order to work effectively with Jet engine noise, one needs to simulate
+ the entire flow field of the jet.
+ This involves extremely large simulations
+\end_layout
+
+\end_body
+\end_document
