@@ -59,8 +59,12 @@
 
 \begin_body
 
-\begin_layout Part*
+\begin_layout Section*
 Introduction
+\end_layout
+
+\begin_layout Subsection*
+Motivation
 \end_layout
 
 \begin_layout Standard
@@ -176,6 +180,92 @@ Fluid Structure interaction is also important for the other main motivation
  duty of science to undertake the job of trying to prevent the blast induced
  brain injuries that are now becoming a major problem for the returning
  soldiers.
+\end_layout
+
+\begin_layout Subsection*
+Background
+\end_layout
+
+\begin_layout Subsubsection*
+CFD
+\end_layout
+
+\begin_layout Standard
+Computational Fluid Dynamics is a field of computational physics that models
+ the flows of fluids.
+ This uses boundary conditions and definitions of the gas or fluid constitution
+ in order to simulate the interaction of the fluids in the flow and the
+ surrounding fluid.
+\end_layout
+
+\begin_layout Subsubsection*
+LES
+\end_layout
+
+\begin_layout Standard
+Large Eddy Simulations are simulations of fluid dynamics that include near
+ field and far field flows of trubulent flows.
+ They allow for better resolution than RANS models and better computational
+ efficiency than DNS models.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Unsteady Simulations
+\end_layout
+
+\begin_layout Standard
+The simulations used in the studies are unsteady in nature, meaning that
+ the flow does not ever reach a steady state and is in constant flux.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Unstructured Grids
+\end_layout
+
+\begin_layout Standard
+The code is built on unstructured grids, allowing for much more intricate
+ geometries than are possible for the same number of elements in a structured
+ code.
+ It also allows for easier refinement in some regions without need for global
+ refinement.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+CSD
+\end_layout
+
+\begin_layout Standard
+Computational Structural Dynamics models the motion and reaction of solids
+ during collisions and in response to stresses from inside and outside forces.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+FSI
+\end_layout
+
+\begin_layout Standard
+Fluid-Structure Interaction is a coupling of a fluid solver with a structural
+ sover in order to model the reaction of a solid to changes in a fluid flow
+ and in return the reactions of the fluid flow to the solid and the chasnges
+ in the solid.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Adjoint-Based Optimization
+\end_layout
+
+\begin_layout Standard
+Optimization of a flow with respect to a certain trait that one would like
+ to minimize or maximize.
+ Given a control surface with n points, adjoint-based optimization can give
+ a large step toward the optimal solution for roughly the cost of 2-3 forward
+ simulation compared to n forward simulations with standard optimization
+ techniques.
 \end_layout
 
 \end_body
