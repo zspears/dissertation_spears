@@ -129,6 +129,15 @@ Jet engine noise is a problem as old as jet fighters themselves.
  As the engines got and continue to get more powerful, the problem of engine
  noise gets continually worse.
  When looking at aircraft carriers, the problem is even larger.
+ The solution to jet engine noise in commercial airliners has been universally
+ to increase the bypass ratio.
+ Increasing the bypass ratio allows for more cold air to be blown around
+ the jet engine in the cowlings around the outside.
+ This makes for a much larger mixing layer along with making for a much
+ slower transition from the ambient air to the hot and fast jet engine exhaust.
+ This is not feasible for military jets as the high demands on military
+ jets mean that the loss of possible thrust to pushing the bypass air around
+ the engine is completely unacceptable.
  Not only are there many jets on the carrier and taking off nearly constantly,
  but the workers on the deck of the carrier are exposed to the jet noise
  from a distance much less than anywhere else.
@@ -250,7 +259,7 @@ FSI
 \begin_layout Standard
 Fluid-Structure Interaction is a coupling of a fluid solver with a structural
  sover in order to model the reaction of a solid to changes in a fluid flow
- and in return the reactions of the fluid flow to the solid and the chasnges
+ and in return the reactions of the fluid flow to the solid and the changes
  in the solid.
  
 \end_layout
@@ -266,6 +275,128 @@ Optimization of a flow with respect to a certain trait that one would like
  a large step toward the optimal solution for roughly the cost of 2-3 forward
  simulation compared to n forward simulations with standard optimization
  techniques.
+ Storage and communication requirements tend to be a limiting factor for
+ adjoint-based optimization making it prohibitively costly without additional
+ estimation or other advances.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Finite Element Method
+\end_layout
+
+\begin_layout Standard
+Finite element method description
+\end_layout
+
+\begin_layout Subsubsection*
+Eulerian motion
+\end_layout
+
+\begin_layout Standard
+Fluid is described in a global reference frame.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Lagrangian motion
+\end_layout
+
+\begin_layout Standard
+Motion is described in the frame of reference of the particle and the motion
+ of said particle
+\end_layout
+
+\begin_layout Subsection*
+Previous Work
+\end_layout
+
+\begin_layout Subsubsection*
+Jet Engine Noise Reduction
+\end_layout
+
+\begin_layout Standard
+There have been a multitude of papers on jet engine noise reduction.
+ The main work that will be focused on in this paper is based on the work
+ by Kailasanath et al.
+ This work is on the addition of flow disrupters on the end of the exhaust
+ nozzle called chevrons.
+ These chevrons allow for the sheer regions to be minimized by helping to
+ add some vorticity in the streamwise direction of the flow and thus increasing
+ the mixing layer.
+ The major benefit of this is a small reduction in noise in the aft direction,
+ but a large reduction in the forward direction.
+ Namely, the chevron addition helps to reduce and eliminate the screech
+ from supersonic jets.
+ Screech is the forward propogation of the shock wave from the supersonic
+ gasses escaping the nozzle in the subsonic ambient air.
+ The research also implies that the main noise-generating region of the
+ noise that propogates to the far field is the shear layer noise and in
+ order to reduce overall far field noise the goal should be to increase
+ the mixing layer and thus decrease the shear layer.
+ The pressure waves from the mixing layer tend to disipate in the wake of
+ the flow in much less time than that of the shear noise.
+ Arguably, this would be because the shear noise is escaping without being
+ subjected to the vorticity of the mixing layer.
+ 
+\end_layout
+
+\begin_layout Standard
+There have also been a number of suggestions for flow interrupters inserted
+ into the nozzle of the jet exhaust.
+ These are shown to reduce the noise level of the jets, but the need of
+ military style jets to utilize every bit of thrust available tends to make
+ these solutions a bit too expensive in the thrust cost to be deployable.
+ For that reason, the research will be looking into ways of decreasing jet
+ engine noise with a minimal and ideally negligible cost to thrust.
+ 
+\end_layout
+
+\begin_layout Standard
+One possible solution which could provide both a reduction in noise and
+ minimal cost to possibly even marginal gain in thrust is fluidic injection
+ at the nozzle mouth.
+ Fluidic injection could introduce streamwise vorticity while adding a bit
+ of material flowing in the direction of the jet exhaust.
+\end_layout
+
+\begin_layout Subsubsection*
+Fluid Structure Interaction
+\end_layout
+
+\begin_layout Standard
+Fluid Structure interaction has been used for generations in one form or
+ another.
+ It started out as one way coupling of fluid pressures to solids and then
+ grew to a two-way coupling of the fluid and structure.
+ Most of the modern fluid structure codes are using ALE solvers.
+ ALE stands for arbitrary Lagrangian-Eulerian solutions.
+ This means that the fluids are solved in eulerian form and the solids in
+ lagrangian form, as both are naturally done in their respective individual
+ codes.
+ With ALE forms, a code can only map small deformations before it must be
+ regridded in order to avoid the development of nonconvex elements which
+ will lead to useless reults.
+ This can introduce large time sinks which make the ALE forms extremely
+ costly and can introduce some extra error which could be avoided if one
+ could write a fluid solver and solid solver in the same coordinates.
+ 
+\end_layout
+
+\begin_layout Standard
+Unified continuum methods attempts to do just that.
+ Most unified continuum methods take a strictly eulerian approaches for
+ the fluid and the solid.
+ In most cases they treat the solid as eulerian for the interaction but
+ continually map it back to original position in order to calculate the
+ standard lagrangian for of the solids and then map back to eulerian for
+ the interface.
+ The interfact is typically tracked from the movement of the solid and is
+ kept in a continuum method such that a small amount of area in the boundary
+ region between the solid and fluid is treated as a mixture of the two.
+ This leads to a semi-stagnation of the fluid around the solid and can lead
+ to some non-physical results.
+ 
 \end_layout
 
 \end_body
