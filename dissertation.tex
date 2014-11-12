@@ -116,7 +116,34 @@ now becoming a major problem for the returning soldiers.
 Computational Fluid Dynamics is a field of computational physics that
 models the flows of fluids. This uses boundary conditions and definitions
 of the gas or fluid constitution in order to simulate the interaction
-of the fluids in the flow and the surrounding fluid.
+of the fluids in the flow and the surrounding fluid. Computational
+Fluid Dynamics is able to simulate a range of interactions and can
+be used for both compressible and incompressible fluids. Turbulent
+jet modeling is a major application of CFD that is used in this paper.
+One can also use CFD to model the propogation of propeller wakes in
+submarines leading to a very similar signature to whale trails. This
+method has been used recently to help in finding submarines travelling
+at reasonable depths that were otherwise invisible to the naked eye
+or radar. The uses of CFd are countless and these are just a few that
+have some tactical relationship to the research at hand. 
+
+
+\subsubsection*{Compressible Fluids}
+
+Compressible Fluids are those that can be pushed into a smaller space
+at the cost of raising the pressure in the containment. For example,
+air is a compressible fluid. One can take easily a 50 mL container
+of air and compress it into a 30 mL container. The only difference
+would be the work to force the air in and the difference in the pressure
+and such of the air after it was compressed into the smaller space. 
+
+
+\subsubsection*{Incompressible Fluids}
+
+Incompressible Fluids cannot be forced into a container of smaller
+volume. For example, water is an incompressible fluid. If one tries
+to take 50 mL of water and press it into a 30 mL container, it simply
+cannot be done. This is because water is incompressible. 
 
 
 \subsubsection*{LES}
@@ -146,7 +173,18 @@ without need for global refinement.
 
 Computational Structural Dynamics models the motion and reaction of
 solids during collisions and in response to stresses from inside and
-outside forces. 
+outside forces. THis allows for simulations of large scale structures
+as well as possibly the modeling of the very small scale structure
+of the material itself. In CSD one may model and entire building and
+how it would respond to a collision with a vehicle of some sort, or
+oen could model the interaction of molecules betweeen a shoe and the
+sidewalk in simulating a person walking. CSD has been used in the
+determination of strength of materials for a long time. This tells
+the breaking point of the material due to stress and is very important
+in the design of buildings and building materials as well as the field
+related to this paper of body armor materials. Current body armor
+material models, however, do leave a bit to be desired in the matchign
+of theoretical to actual limits of stopping power. 
 
 
 \subsubsection*{FSI}
@@ -154,7 +192,11 @@ outside forces.
 Fluid-Structure Interaction is a coupling of a fluid solver with a
 structural sover in order to model the reaction of a solid to changes
 in a fluid flow and in return the reactions of the fluid flow to the
-solid and the changes in the solid. 
+solid and the changes in the solid. Fluid structure interaction is
+used for thisngs such as blast mitigation for buildings and blast
+damage analysis. It is also used to test ships' sea worthiness without
+having to actually put a ship out to sea and risk the lives of the
+people who would have to be manning the vessel.
 
 
 \subsubsection*{Adjoint-Based Optimization}
@@ -183,6 +225,23 @@ Fluid is described in a global reference frame.
 
 Motion is described in the frame of reference of the particle and
 the motion of said particle
+
+
+\subsubsection*{Jet Engine Noise}
+
+Jet engine noise can be divided into two distinct sections. The first
+section is engine noise. This includes the actual whir of the turbines
+along with the intake noise and the explosion of the fuel to drive
+the engine. At low speed outputs this is the dominant noise. For military
+jets, as are currently under consideration, the dominating noise is
+the jet flow noise. The pressure waves created by the faster moving
+jet flow interacting with the slower moving ambient air propogate
+much further down stream and are thus a problem much farther away.
+Flow noise can propogate in both directions and can be highly dtetrimental
+to the hearing of workers on flight decks as well as buildings neighboring
+air fields. Quite regularly, supersonic aircraft blast windows out
+of homes near airfields as the cross the sonic threshold and create
+the sonic boom.
 
 
 \subsection*{Previous Work}
@@ -223,6 +282,45 @@ and minimal cost to possibly even marginal gain in thrust is fluidic
 injection at the nozzle mouth. Fluidic injection could introduce streamwise
 vorticity while adding a bit of material flowing in the direction
 of the jet exhaust.
+
+The code that has been most influential to this research in prior
+work is FeFlo. FeFlo is a finite element code capable of doing fully
+three dimensional Large Eddy Simulations for jet engine noise as well
+as working for a range of other applications. It was developed by
+Dr. Lohner who is currently at George Mason University. FeFlo has
+been used for adjoint based optimization as well. The main drawback
+for adjoint based optimization as has been used with FeFlo is the
+memory and communication costs as well as the thrashing of the hard
+drives by the repeated overwriting in the calculation.
+
+Adjoint based optimization has been proposed as a very useful method
+of optimizing systems with large numbers of variables. This is because
+adjoint based optimization makes light work of these variables by
+using onyl one forward solver every iteration as opposed to a minimum
+of n iterations for a control space with n variables. Considering
+some real world control spaces have thousands to millions of control
+points, the finite difference form of optimization becomes intractable
+fairly quickly. Adjoint based optimization does have a drawback to
+it however. For an adjoint run to be possible, the adjoint solver
+needs to have access to all of the forward data in reverse order.
+The main problem from this is that in order to have access to the
+forward data in reverse order, one must either store all of the field
+data at every time step and then access it in reverse order or store
+it in a carefully planned way so that it can all be gotten to in one
+form or another. Some people have gotten around this cost by only
+storing some of the checkpoints and simply interpolating between them.
+This does cut some of the cost, but it also introduces more unneccesary
+error into the simulation. Others have used Monte Carlo Methods to
+emulate adjoint based optimization, but that requires the running
+of thousands of forward simulations to get a reasonable level of confidence
+that almost negates the benefit of cutting out the need of running
+all of the simulations for each control point. One solution to the
+data crunch, at least in terms of storage, is to do checkpointing
+of the forward solutions. In this manner, one would store a strategic
+set of forward states and then recalculate the in between steps when
+neccesary. This allows for much longer runs and much larger simulations
+in the same storage space. The current research looks into the problem
+of communication costs in the adjoint based optimization realm.
 
 
 \subsubsection*{Fluid Structure Interaction}
