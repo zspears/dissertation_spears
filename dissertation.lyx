@@ -1330,14 +1330,16 @@ Reduced Memory
 \end_layout
 
 \begin_layout Standard
-One method which has been implemented to get around the cost of storing
- the entire forward run for adjoint solutions has been to reduce the amount
- stored.
- From the partial data, the rest is the interpolated and used for calculation
- of the adjoint.
- This allows for larger run sizes which is good, but it also introduces
- error where it is not necessary.
- 
+One method which has been mitigate the storage costs associated with an
+ adjoint simulation has been to reduce the amount stored via data compression,
+ downsampling, and interpolation.
+ From the reduced data, intermediate points in space and time are interpolated
+ and used for calculation of the adjoint~
+\backslash
+cite{Wei04, Kim11}.
+ This allows for larger run sizes, but it also introduces additional error,
+ the effect of which is difficult to quantify, which is unnecessary, in
+ view of the availability of effective checkpointing methods.
 \end_layout
 
 \begin_layout Paragraph*
@@ -1345,15 +1347,18 @@ Monte Carlo Methods
 \end_layout
 
 \begin_layout Standard
-Monte Carlo methods have been used in ~
+Monte Carlo methods have been used by Wang et al~
 \backslash
-cite{Wan08_MC} to avoid running any form of backward solver whatsoever.
- This method cuts out the cost of running multiple forward runs or and backward
- runs, but also introduces errors which are unnecessary.
+cite{Wan08_MC} to avoid running the adjoint solver in reverse, to circumvent
+ the need to access the primal solution in reverse time order.
+ However, this method also introduces additional error, as well as an uncertain
+ cost associated with multiple forward runs as required by the Monte Carlo
+ method.
+ 
 \end_layout
 
 \begin_layout Paragraph*
-Naive Checkpointing
+Equidistant Checkpointing
 \end_layout
 
 \begin_layout Standard
@@ -1379,44 +1384,57 @@ Binomial Checkpointing
 \end_layout
 
 \begin_layout Standard
-Binomial checkpointing is the best option currently implemented in codes.
- It allows the user to store a good bit more information than equidistant
- checkpointing while keeping the same benefit of no new error introduced.
- For the given number of recalculations allowed, binomial checkpointing
- gives optimal use of space.
- The methods are however generally based on storing all data in the hard
- disk and thus, even though they may come closer to solving the problem
- of data storage, they still do nothing with the problem of the cost of
- IO.
+Binomial checkpointing schedules checkpoints so that the available storage
+ is always kept as full as possible.
+ As a result, it allows the adjoint solver to store more checkpoints than
+ equidistant checkpointing while retaining the benefit of not introducing
+ any additional error.
+ For the given number of recalculations allowed, thus stipulating the allowed
+ number of recursions, binomial checkpointing gives optimal use of storage
+ space.
  
 \end_layout
 
 \begin_layout Standard
-Revolve, an algorithm which can be used with a large number of applications
- is a good example of a binomial checkpointing algorithm.
+Revolve~
+\backslash
+cite{Gre00}, a well known binomial checkpointing algorithm, has been used
+ with a large number of applications.
  This scheduling software minimizes the number of recalculations given the
  number of steps to take and the number of checkpoints available.
- It can also utilize the memory in some ways.
- One of the problems with Revolve though is that it is an add on to any
- code and thus must be called out to in order to give it control.
- This would mean that there must be context switches between actual calculation
- and the checkpointing scheme.
- A fully integrated checkpointing scheme is needed to get around this problem.
+ This algorithm allows for the user's code to perform all calculation aside
+ from the actual determination of checkpointing schedule.
  
 \end_layout
 
 \begin_layout Standard
-Context switching is a large problem in the change between forward and reverse
- solvers as well.
- If the two are not completely coupled, then there must be a time of changing
- all variables and set up between the two every time the method changes
- from forward to reverse or vice versa.
- This cost becomes large, given the number of times the switch happens in
- a method such as binomial checkpointing.
- This means that to get the optimal code for this type of checkpointing,
- the forward and reverse solvers would need to function off of the exact
- same information for all of the grid and vectors and any calculation space.
- This calls for completely coupled forward and reverse solvers.
+For the current implementation, the control period is known, allowing for
+ checkpointing schedules to be made a priori.
+ For some applications, this is not possible and thus there is a need for
+ dynamic checkpointing, where checkpointing cannot be scheduled a priori.
+ Examples of dynamic checkpointing are A-Revolve~
+\backslash
+cite{Hin05}, online checkpointing~
+\backslash
+cite{Heu06, Stu08}, and minimal repetition dynamic checkpointing~
+\backslash
+cite{Wan09}.
+ Dynamic checkpointing may be looked into for future applications if the
+ control period becomes less predictable.
+ 
+\end_layout
+
+\begin_layout Standard
+Context switching can be a bottleneck for some codes using binomial checkpointin
+g.
+ If the primal and adjoint solvers are not tightly coupled, e.g.
+ using the same temporary arrays and grid structures, there may be a significant
+ cost to switch between the two solvers.
+ This cost becomes large, given the frequent switching that occurs with
+ binomial checkpointing, in contrast to equidistant checkpointing, where
+ switching is make less frequent.
+ It is therefore crucial that an adjoint solver employing binomial checkpointing
+, be able to switch between the primal and adjoints solver with zero overhead.
 \end_layout
 
 \begin_layout Standard
@@ -1478,16 +1496,6 @@ cite{Tor12} and many like it, the benefit of the method is only in the added
  In addition, writing the information to the same place on the hard drive
  repeatedly shortens the lives of the hard drives in every system on which
  the code is run.
-\end_layout
-
-\begin_layout Standard
-There has been tons of work on steady adjoint based optimization for things
- like drag and lift from airfoils.
- There have been attempts for 3-D adjoint based optimization of unsteady
- simulations, but most of them have actually been run in 2 dimensions or
- run in really small test cases.
- Our code will run the small test cases very easily, but will also run simulatio
-ns of much larger size.
 \end_layout
 
 \begin_layout Subsection*
